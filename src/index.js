@@ -54,9 +54,19 @@ const s = ( sk ) => {
       let yy = x * Math.sin(x);
 
       //colors
-      let rgb = feet.color.inverted ? feet.interpolateFn( i / 267 ) : feet.interpolateFn( 1 - i / 267 );
+
+      //as i counts down, reduce the chances of a selection off of the gradient
+      //i's t value going through the loop
+      let iRatio = i / 267;
+      //as the ratio appraches 0, the range multiplier should get closer to 0
+      let rangeMultiplier = feet.map(iRatio, 0, 1, 0.05, 0.5)
+      //add a random number to t, using the range multiplier to set range of random values
+      let rand = feet.map(fxrand(), 0, 1, rangeMultiplier * -1, rangeMultiplier);
+      let iWithNoise = iRatio + rand;
+
+      //conditional manages putting lighter colors on top in either standard or inverted mode
+      let rgb = feet.color.inverted ? feet.interpolateFn( iWithNoise ) : feet.interpolateFn( 1 - iWithNoise );
       let col = sk.color(rgb.r, rgb.g, rgb.b);
-      //let col = sk.color(colors[colIndex].r, colors[colIndex].g, colors[colIndex].b);
       col.setAlpha(feet.map(i, 0, 267, 150, 0));
       sk.fill(col);
 
