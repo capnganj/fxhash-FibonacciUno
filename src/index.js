@@ -11,9 +11,7 @@ const s = ( sk ) => {
   //global sketch variables
   let feet = {};
   let previewed = false;
-  let colors = new Array(8);
   let factor = 3.0;
-  let background = {};
 
   //iteration vars -- these get reset on screen resize
   let i = 267;
@@ -27,29 +25,17 @@ const s = ( sk ) => {
    
     // FX Features
     window.$fxhashFeatures = {
-      "Palette" : feet.color.name,
-      "Cell Size": feet.cellWidth.tag,
-      "CA Rule": feet.rule.toString()
+      "Palette" : feet.color.inverted ? feet.color.name + " Invert" : feet.color.name
     };
     console.log("fxhashFeatures", window.$fxhashFeatures);
     //console.log("HashSmokeFeatures", feet);
 
     //set the background color 
-    background = feet.color.cero;
     sk.background(0);
     sk.drawingContext.shadowColor = 'black';
     sk.drawingContext.shadowBlur = 15;
     sk.noStroke();
     sk.ellipseMode(sk.CENTER);
-
-    colors[0] = feet.color.cero;
-    colors[1] = feet.color.uno;
-    colors[2] = feet.color.dos;
-    colors[3] = feet.color.tres;
-    colors[4] = feet.color.quatro;
-    colors[5] = feet.color.cinco;
-    colors[6] = feet.color.sies;
-    colors[7] = feet.color.siete;
 
     factor = feet.map(fxrand(), 0, 1, 2.97, 3.03);
     console.log("factor", factor);
@@ -68,9 +54,10 @@ const s = ( sk ) => {
       let yy = x * Math.sin(x);
 
       //colors
-      let colIndex = Math.round(feet.map( fxrand(), 0, 1, 0, 7));
-      let col = sk.color(colors[colIndex].r, colors[colIndex].g, colors[colIndex].b);
-      col.setAlpha(feet.map(i, 0, 267, 100, 0));
+      let rgb = feet.color.inverted ? feet.interpolateFn( i / 267 ) : feet.interpolateFn( 1 - i / 267 );
+      let col = sk.color(rgb.r, rgb.g, rgb.b);
+      //let col = sk.color(colors[colIndex].r, colors[colIndex].g, colors[colIndex].b);
+      col.setAlpha(feet.map(i, 0, 267, 150, 0));
       sk.fill(col);
 
       //size
