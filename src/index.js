@@ -15,6 +15,7 @@ const s = ( sk ) => {
 
   //iteration vars -- these get reset on screen resize
   let i = 267;
+  let length = 0;
 
   //sketch setup
   sk.setup = () => {
@@ -30,10 +31,13 @@ const s = ( sk ) => {
     console.log("fxhashFeatures", window.$fxhashFeatures);
     //console.log("HashSmokeFeatures", feet);
 
+    //set the screen diagonal
+    length = screenDiagonal();
+
     //set the background color 
     sk.background(0);
     sk.drawingContext.shadowColor = 'black';
-    sk.drawingContext.shadowBlur = 15;
+    sk.drawingContext.shadowBlur = length * 0.005;
     sk.noStroke();
     sk.ellipseMode(sk.CENTER);
 
@@ -71,8 +75,7 @@ const s = ( sk ) => {
       sk.fill(col);
 
       //size
-      let l = Math.sqrt(Math.pow(sk.windowWidth, 2) + Math.pow(sk.windowHeight, 2));
-      let r = feet.map(i, 0, 267, l/40, l/5);
+      let r = feet.map(i, 0, 267, length/40, length/5);
 
       //yes
       sk.ellipse( (sk.windowWidth * 0.618) + xx, sk.windowHeight/2 + yy, r, r);
@@ -99,10 +102,19 @@ const s = ( sk ) => {
   sk.windowResized = () => {
     i=267;
     sk.resizeCanvas(sk.windowWidth, sk.windowHeight);
+    length = screenDiagonal();
+    sk.drawingContext.shadowBlur = length * 0.005;
     sk.background(0);
     sk.loop();
   };
+
+  function screenDiagonal() {
+    return Math.sqrt(Math.pow(sk.windowWidth, 2) + Math.pow(sk.windowHeight, 2));
+  }
 };
+
+
+
 
 //pass our sketch to p5js
 let myp5 = new p5(s);
