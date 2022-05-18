@@ -11,9 +11,9 @@ const s = ( sk ) => {
   //global sketch variables
   let feet = {};
   let previewed = false;
-  let factor = 3.0;
+  let factor = 1.5;
   let colors = [];
-  let numberOfCircles = 333;
+  let numberOfCircles = 512;
 
   //iteration vars -- these get reset on screen resize
   let i = numberOfCircles;
@@ -30,8 +30,8 @@ const s = ( sk ) => {
     window.$fxhashFeatures = {
       "Palette" : feet.color.inverted ? feet.color.name + " Invert" : feet.color.name,
       "Size": "Large", //circle sizes
-      "Opacity" : "Medium", //circle opacity
-      "Shuffle" : "Some", //how shuffled are the colors?
+      "Opacity" : feet.opacity.tag, //circle opacity
+      "Noise" : feet.noise.tag, //how shuffled are the colors?
       "Position" : "Top", //where is the focal point?
       "Direction" : "Clockwise" //radial stacking direction
     };
@@ -42,16 +42,16 @@ const s = ( sk ) => {
     length = screenDiagonal();
 
     //set the background color and other sketch-level variables
-    sk.background(0);
+    sk.background(20);
     sk.drawingContext.shadowColor = 'black';
-    sk.drawingContext.shadowBlur = length * 0.005;
+    sk.drawingContext.shadowBlur = length * 0.003;
     sk.noStroke();
     sk.ellipseMode(sk.CENTER);
 
     //make colors for the sketch -- happens only once so order is the same on resizes
     makeColors();
 
-    factor = feet.map(fxrand(), 0, 1, 1.45, 1.55);
+    factor = feet.map(fxrand(), 0, 1, 1.47, 1.53);
     console.log("factor", factor);
   };
 
@@ -70,7 +70,7 @@ const s = ( sk ) => {
       //colors
       let rgb = colors[i];
       let col = sk.color(rgb.r, rgb.g, rgb.b);
-      col.setAlpha(feet.map(i, 0, numberOfCircles, 150, 0));
+      col.setAlpha(feet.map(i, 0, numberOfCircles, feet.opacity.topValue, feet.opacity.baseValue));
       sk.fill(col);
 
       //size
@@ -101,7 +101,7 @@ const s = ( sk ) => {
     sk.resizeCanvas(sk.windowWidth, sk.windowHeight);
     length = screenDiagonal();
     sk.drawingContext.shadowBlur = length * 0.005;
-    sk.background(0);
+    sk.background(20);
     sk.loop();
   };
 
@@ -115,7 +115,7 @@ const s = ( sk ) => {
       //i's t value going through the loop
       let t = j / numberOfCircles;
       //as the ratio appraches 0, the range multiplier should get closer to 0
-      let rangeMultiplier = feet.map(t, 0, 1, 0.5, 0.05)
+      let rangeMultiplier = feet.map(t, 0, 1, feet.noise.baseValue, feet.noise.topValue)
       //add a random number to t, using the range multiplier to set range of random values
       let rand = feet.map(fxrand(), 0, 1, rangeMultiplier * -1, rangeMultiplier);
       let tWithNoise = t + rand;

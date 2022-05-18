@@ -11,6 +11,21 @@ class Features {
         };
         this.setColorPalette();
 
+        //how noisy?  this drives the topmost layers' prbablilty of jumping around the color gradient
+        this.noise = {
+            tag: "",
+            baseValue: 0.5,
+            topValue: 0.5
+        }
+        this.setNoise();
+
+        //how opaque do we stach up to?
+        this.opacity = {
+            tag: "",
+            baseValue: 0.5,
+            topValue: 0.5
+        }
+        this.setOpacity();
     }
 
     //map function logic from processing <3
@@ -111,6 +126,47 @@ class Features {
         if( fxrand() > 0.666 ) {
             this.color.inverted = true;
         }
+    }
+
+    setNoise() {
+        let n = fxrand();
+        if (n < 0.38) {
+            this.noise.tag = "Quiet"
+        }
+        else if ( n < 0.83) {
+            this.noise.tag = "Even"
+        }
+        else {
+            this.noise.tag = "Loud"
+        }
+        this.noise.topValue = this.map(n, 0, 1, 0.005, 0.07);
+        this.noise.baseValue = this.map(n, 0, 1, 0.2, 0.5);
+    }
+
+    setOpacity() {
+        let o = fxrand();
+        if (o < 0.41) {
+            this.opacity.tag = "Low";
+        }
+        else if (o < 0.69) {
+            this.opacity.tag = "Some";
+        }
+        else {
+            this.opacity.tag = "High"
+        }
+        this.opacity.baseValue = this.map(o, 0, 1, 5, 0);
+        this.opacity.topValue = this.map(o, 0, 1, 150, 110);
+    }
+
+    setDirection() {
+        let o = fxrand();
+        if (0 > 0.5) {
+            this.direction.tag = "Clockwise";
+        }
+        else {
+            this.direction.tag = "Counterclockwise"
+        }
+        this.direction.value = Math.round(o);
     }
 }
 
