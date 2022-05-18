@@ -18,6 +18,7 @@ const s = ( sk ) => {
   //iteration vars -- these get reset on screen resize
   let i;
   let length;
+  let mask;
 
   //sketch setup
   sk.setup = () => {
@@ -32,26 +33,26 @@ const s = ( sk ) => {
       "Radii": feet.radii.tag, //circle sizes
       "Opacity" : feet.opacity.tag, //circle opacity
       "Noise" : feet.noise.tag, //how shuffled are the colors?
-      "Position" : "Top", //where is the focal point?
+      "Position" : feet.position.tag, //where is the focal point?
       "Direction" : feet.direction.tag,  //radial stacking direction
       "Quantity": feet.quantity.tag  //how many circles in the loop?
     };
     console.log("fxhashFeatures", window.$fxhashFeatures);
     //console.log("HashSmokeFeatures", feet);
 
-    //set the screen diagonal
-    length = screenDiagonal();
+    //create the mask image and calculate length
+    createMask();
 
     //set the background color and other sketch-level variables
     sk.drawingContext.shadowColor = 'black';
-    sk.drawingContext.shadowBlur = length * 0.003;
+    sk.drawingContext.shadowBlur = length * 0.005;
     sk.noStroke();
     sk.ellipseMode(sk.CENTER);
 
     //make colors for the sketch -- happens only once so order is the same on resizes
     makeColors();
 
-    //set other sketch vars using features
+    //set other sketch vars using features and length
     numberOfCircles = feet.quantity.value
     factor = feet.map(fxrand(), 0, 1, 1.47, 1.53);
     //console.log("factor", factor);
@@ -59,17 +60,22 @@ const s = ( sk ) => {
     //set i to number of circles here and in resize
     i = numberOfCircles;
     sk.background(20);
+
+    
   };
 
 
   //sketch draw function 
   sk.draw = () => {
 
-    //sk.background(0);
+    //circles
     if (i >= 0) {
       
       //position
+
+      //raw feed of floats for trig to chew on
       let x = i * factor;
+      //unitless offset values 
       let xx = feet.direction.value ? x * Math.cos(x) : x * Math.sin(x);
       let yy = feet.direction.value? x * Math.sin(x) : x * Math.cos(x);
 
@@ -82,11 +88,34 @@ const s = ( sk ) => {
       //size
       let r = feet.map(i, numberOfCircles, 0, length/feet.radii.baseValue, length/feet.radii.topValue);
 
-      //yes
-      sk.ellipse( (sk.windowWidth * 0.618) + xx, sk.windowHeight/2 + yy, r, r);
+      //position
+      let xPos, yPos;
+      if (feet.position.tag == "Right") {
+        xPos = (sk.windowWidth * 0.618) + xx;
+        yPos = (sk.windowHeight / 2) + yy
+      }
+      else if (feet.position.tag == "Left") {
+        xPos = (sk.windowWidth * 0.618/2) + xx;
+        yPos = (sk.windowHeight / 2) + yy
+      }
+      else if (feet.position.tag == "Top") {
+        xPos = (sk.windowWidth / 2) + xx;
+        yPos = (sk.windowHeight * 0.618/2) + yy
+      }
+      else {
+        xPos = (sk.windowWidth / 2) + xx;
+        yPos = (sk.windowHeight * 0.618) + yy
+      }
+      //yes!
+      sk.ellipse( xPos, yPos, r, r);
 
       //increment
       i--
+
+
+
+      //draw mask
+      sk.image(mask, 0, 0);
     }
 
     //call preview and noloop after going all the way through
@@ -105,15 +134,11 @@ const s = ( sk ) => {
   sk.windowResized = () => {
     i=numberOfCircles;
     sk.resizeCanvas(sk.windowWidth, sk.windowHeight);
-    length = screenDiagonal();
-    sk.drawingContext.shadowBlur = length * 0.003;
+    createMask();
+    sk.drawingContext.shadowBlur = length * 0.005;
     sk.background(20);
     sk.loop();
   };
-
-  function screenDiagonal() {
-    return Math.sqrt(Math.pow(sk.windowWidth, 2) + Math.pow(sk.windowHeight, 2));
-  }
 
   function makeColors() {
     for (let j = numberOfCircles; j >= 0; j -= 1) {
@@ -132,6 +157,33 @@ const s = ( sk ) => {
       //add to the global array of color
       colors.push(rgb);
     }
+  }
+
+  function createMask() {
+    //create graphics the size of the canvas
+    let g = sk.createGraphics(sk.windowWidth, sk.windowHeight);
+    g.rectMode(sk.CENTER);
+    g.fill(20)
+    g.rect(sk.windowWidth/2, sk.windowHeight/2, sk.windowWidth, sk.windowHeight)
+    
+
+    let a = sk.color(255);
+    a.setAlpha(255);
+    g.fill(a);
+    g.noStroke();
+    g.blendMode(sk.REMOVE);
+    //handle verical and horizontal stuffs
+    if( feet.position.orientation == "H" ) {
+      //draw a horizontal rectangle and compute length
+      g.rect(sk.windowWidth/2, sk.windowHeight/2, sk.windowWidth * 0.9, sk.windowWidth * 0.9 * 0.618);
+      length = Math.sqrt(Math.pow(sk.windowWidth * 0.9, 2) + Math.pow(sk.windowWidth * 0.9 * 0.618, 2));
+    }
+    else {
+      //draw a vertical rectangle and compute length
+      g.rect(sk.windowWidth/2, sk.windowHeight/2, sk.windowHeight * 0.9 * 0.618, sk.windowHeight * 0.9)
+      length = Math.sqrt(Math.pow(sk.windowHeight * 0.9 * 0.618, 2), Math.pow(sk.windowHeight * 0.9, 2))
+    }
+    mask = g.get();
   }
 };
 

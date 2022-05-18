@@ -48,6 +48,13 @@ class Features {
             value: 256
         }
         this.setQuantity();
+
+        //center position and orientation?
+        this.position = {
+            tag: "Right",
+            orientation: "H"
+        }
+        this.setPosition();
     }
 
     //map function logic from processing <3
@@ -208,8 +215,8 @@ class Features {
         else {
             this.radii.tag = "Extra Extra Large";
         }
-        this.radii.baseValue = this.map(r, 0, 1, 5, 3);
-        this.radii.topValue = this.map(r, 0, 1, 50, 30);
+        this.radii.baseValue = this.map(r, 0, 1, 4, 2);
+        this.radii.topValue = this.map(r, 0, 1, 40, 20);
     }
 
     setQuantity() {
@@ -224,6 +231,26 @@ class Features {
             this.quantity.tag = "Over"
         }
         this.quantity.value = Math.round(this.map(q, 0, 1, 333, 512))
+    }
+
+    setPosition() {
+        let p = fxrand();
+        if (p < 0.25) {
+            this.position.tag = "Right"
+            this.position.orientation = "H"
+        }
+        else if (p < 0.5) {
+            this.position.tag = "Left"
+            this.position.orientation = "H"
+        }
+        else if ( p < 0.75 ) {
+            this.position.tag = "Top"
+            this.position.orientation = "V"
+        }
+        else {
+            this.position.tag = "Bottom"
+            this.position.orientation = "V"
+        }
     }
 }
 
