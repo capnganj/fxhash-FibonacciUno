@@ -26,6 +26,13 @@ class Features {
             topValue: 0.5
         }
         this.setOpacity();
+
+        //which way does it rotate?
+        this.direction = {
+            tag: "",
+            value: 0
+        }
+        this.setDirection();
     }
 
     //map function logic from processing <3
@@ -160,7 +167,7 @@ class Features {
 
     setDirection() {
         let o = fxrand();
-        if (0 > 0.5) {
+        if (o > 0.5) {
             this.direction.tag = "Clockwise";
         }
         else {

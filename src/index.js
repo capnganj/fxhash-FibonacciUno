@@ -33,7 +33,7 @@ const s = ( sk ) => {
       "Opacity" : feet.opacity.tag, //circle opacity
       "Noise" : feet.noise.tag, //how shuffled are the colors?
       "Position" : "Top", //where is the focal point?
-      "Direction" : "Clockwise" //radial stacking direction
+      "Direction" : feet.direction.tag //radial stacking direction
     };
     console.log("fxhashFeatures", window.$fxhashFeatures);
     //console.log("HashSmokeFeatures", feet);
@@ -64,8 +64,8 @@ const s = ( sk ) => {
       
       //position
       let x = i * factor;
-      let xx = x * Math.cos(x);
-      let yy = x * Math.sin(x);
+      let xx = feet.direction.value ? x * Math.cos(x) : x * Math.sin(x);
+      let yy = feet.direction.value? x * Math.sin(x) : x * Math.cos(x);
 
       //colors
       let rgb = colors[i];
@@ -100,7 +100,7 @@ const s = ( sk ) => {
     i=numberOfCircles;
     sk.resizeCanvas(sk.windowWidth, sk.windowHeight);
     length = screenDiagonal();
-    sk.drawingContext.shadowBlur = length * 0.005;
+    sk.drawingContext.shadowBlur = length * 0.003;
     sk.background(20);
     sk.loop();
   };
