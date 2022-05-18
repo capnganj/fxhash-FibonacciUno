@@ -33,6 +33,21 @@ class Features {
             value: 0
         }
         this.setDirection();
+
+        //how big are the circles?
+        this.radii = {
+            tag: "",
+            baseValue: 40,
+            topValue: 5
+        }
+        this.setRadii();
+
+        //how many circles in the stack?
+        this.quantity = {
+            tag: "",
+            value: 256
+        }
+        this.setQuantity();
     }
 
     //map function logic from processing <3
@@ -141,10 +156,10 @@ class Features {
             this.noise.tag = "Quiet"
         }
         else if ( n < 0.83) {
-            this.noise.tag = "Even"
+            this.noise.tag = "Nice"
         }
         else {
-            this.noise.tag = "Loud"
+            this.noise.tag = "Noisy"
         }
         this.noise.topValue = this.map(n, 0, 1, 0.005, 0.07);
         this.noise.baseValue = this.map(n, 0, 1, 0.2, 0.5);
@@ -174,6 +189,41 @@ class Features {
             this.direction.tag = "Counterclockwise"
         }
         this.direction.value = Math.round(o);
+    }
+
+    setRadii() {
+        let r = fxrand();
+        if (r < 0.27) {
+            this.radii.tag = "Small";
+        }
+        else if (r < 0.43) {
+            this.radii.tag = "Medium";
+        }
+        else if ( r < 0.71) {
+            this.radii.tag = "Large";
+        }
+        else if ( r < 0.82 ) {
+            this.radii.tag = "Extra Large";
+        }
+        else {
+            this.radii.tag = "Extra Extra Large";
+        }
+        this.radii.baseValue = this.map(r, 0, 1, 5, 3);
+        this.radii.topValue = this.map(r, 0, 1, 50, 30);
+    }
+
+    setQuantity() {
+        let q = fxrand();
+        if (q < 0.43) {
+            this.quantity.tag = "Under"
+        }
+        else if (q < 0.79) {
+            this.quantity.tag = "Within"
+        }
+        else {
+            this.quantity.tag = "Over"
+        }
+        this.quantity.value = Math.round(this.map(q, 0, 1, 333, 512))
     }
 }
 

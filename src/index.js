@@ -16,8 +16,8 @@ const s = ( sk ) => {
   let numberOfCircles = 512;
 
   //iteration vars -- these get reset on screen resize
-  let i = numberOfCircles;
-  let length = 0;
+  let i;
+  let length;
 
   //sketch setup
   sk.setup = () => {
@@ -29,11 +29,12 @@ const s = ( sk ) => {
     // FX Features
     window.$fxhashFeatures = {
       "Palette" : feet.color.inverted ? feet.color.name + " Invert" : feet.color.name,
-      "Size": "Large", //circle sizes
+      "Radii": feet.radii.tag, //circle sizes
       "Opacity" : feet.opacity.tag, //circle opacity
       "Noise" : feet.noise.tag, //how shuffled are the colors?
       "Position" : "Top", //where is the focal point?
-      "Direction" : feet.direction.tag //radial stacking direction
+      "Direction" : feet.direction.tag,  //radial stacking direction
+      "Quantity": feet.quantity.tag  //how many circles in the loop?
     };
     console.log("fxhashFeatures", window.$fxhashFeatures);
     //console.log("HashSmokeFeatures", feet);
@@ -42,7 +43,6 @@ const s = ( sk ) => {
     length = screenDiagonal();
 
     //set the background color and other sketch-level variables
-    sk.background(20);
     sk.drawingContext.shadowColor = 'black';
     sk.drawingContext.shadowBlur = length * 0.003;
     sk.noStroke();
@@ -51,8 +51,14 @@ const s = ( sk ) => {
     //make colors for the sketch -- happens only once so order is the same on resizes
     makeColors();
 
+    //set other sketch vars using features
+    numberOfCircles = feet.quantity.value
     factor = feet.map(fxrand(), 0, 1, 1.47, 1.53);
-    console.log("factor", factor);
+    //console.log("factor", factor);
+
+    //set i to number of circles here and in resize
+    i = numberOfCircles;
+    sk.background(20);
   };
 
 
@@ -74,7 +80,7 @@ const s = ( sk ) => {
       sk.fill(col);
 
       //size
-      let r = feet.map(i, 0, numberOfCircles, length/40, length/5);
+      let r = feet.map(i, numberOfCircles, 0, length/feet.radii.baseValue, length/feet.radii.topValue);
 
       //yes
       sk.ellipse( (sk.windowWidth * 0.618) + xx, sk.windowHeight/2 + yy, r, r);
