@@ -87,6 +87,8 @@ const s = ( sk ) => {
 
     //circles
     if (i >= 0) {
+
+      sk.drawingContext.shadowBlur = length * 0.005;
       
       //position
 
@@ -98,8 +100,8 @@ const s = ( sk ) => {
       //scaled offset values
 
       //scale by unitless maxX and maxY ranges
-      let xxx = feet.position.orientation == "H" ? feet.map(xx, maxX * -1, maxX, length/2 * -1, length/2) : feet.map(xx, maxX * -1, maxX, length*0.8 * -1, length*0.8);
-      let yyy = feet.position.orientation == "H" ? feet.map(yy, maxY * -1, maxY, length/2 * -1, length/2) : feet.map(yy, maxY * -1, maxY, length*0.8 * -1, length*0.8  );
+      let xxx = feet.position.orientation == "H" ? feet.map(xx, maxX * -1, maxX, length/2 * -1, length/2) : feet.map(xx, maxX * -1, maxX, length*0.6 * -1, length*0.6);
+      let yyy = feet.position.orientation == "H" ? feet.map(yy, maxY * -1, maxY, length/2 * -1, length/2) : feet.map(yy, maxY * -1, maxY, length*0.6 * -1, length*0.6 );
 
 
       //colors
@@ -138,6 +140,7 @@ const s = ( sk ) => {
 
 
       //draw mask
+      sk.drawingContext.shadowBlur = 0;
       sk.image(mask, 0, 0);
     }
 
