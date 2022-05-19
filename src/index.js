@@ -20,6 +20,10 @@ const s = ( sk ) => {
   let length;
   let mask;
 
+  //unitless x and y maximums -- need these to map against
+  let maxX= 0;
+  let maxY = 0;
+
   //sketch setup
   sk.setup = () => {
     sk.createCanvas(sk.windowWidth, sk.windowHeight);
@@ -57,6 +61,19 @@ const s = ( sk ) => {
     factor = feet.map(fxrand(), 0, 1, 1.47, 1.53);
     //console.log("factor", factor);
 
+    //max unitless x and y use the number of circles and the factor to figure the largest X and Y values
+    for (let i = numberOfCircles; i > numberOfCircles-10; i--) {
+      let test = i * factor;
+      let newX = Math.abs(feet.direction.value ? test * Math.cos(test) : test * Math.sin(test))
+      let newY = Math.abs(feet.direction.value ? test * Math.sin(test) : test * Math.cos(test))
+      if ( newX > maxX) {
+        maxX = newX;
+      }
+      if ( newY > maxY ) {
+        maxY = newY;
+      }
+    }
+
     //set i to number of circles here and in resize
     i = numberOfCircles;
     sk.background(20);
@@ -78,6 +95,12 @@ const s = ( sk ) => {
       //unitless offset values 
       let xx = feet.direction.value ? x * Math.cos(x) : x * Math.sin(x);
       let yy = feet.direction.value? x * Math.sin(x) : x * Math.cos(x);
+      //scaled offset values
+
+      //scale by unitless maxX and maxY ranges
+      let xxx = feet.position.orientation == "H" ? feet.map(xx, maxX * -1, maxX, length/2 * -1, length/2) : feet.map(xx, maxX * -1, maxX, length*0.8 * -1, length*0.8);
+      let yyy = feet.position.orientation == "H" ? feet.map(yy, maxY * -1, maxY, length/2 * -1, length/2) : feet.map(yy, maxY * -1, maxY, length*0.8 * -1, length*0.8  );
+
 
       //colors
       let rgb = colors[i];
@@ -91,20 +114,20 @@ const s = ( sk ) => {
       //position
       let xPos, yPos;
       if (feet.position.tag == "Right") {
-        xPos = (sk.windowWidth * 0.618) + xx;
-        yPos = (sk.windowHeight / 2) + yy
+        xPos = (sk.windowWidth * 0.618) + xxx;
+        yPos = (sk.windowHeight / 2) + yyy
       }
       else if (feet.position.tag == "Left") {
-        xPos = (sk.windowWidth * 0.618/2) + xx;
-        yPos = (sk.windowHeight / 2) + yy
+        xPos = (sk.windowWidth * 0.618/2) + xxx;
+        yPos = (sk.windowHeight / 2) + yyy
       }
       else if (feet.position.tag == "Top") {
-        xPos = (sk.windowWidth / 2) + xx;
-        yPos = (sk.windowHeight * 0.618/2) + yy
+        xPos = (sk.windowWidth / 2) + xxx;
+        yPos = (sk.windowHeight * 0.618/2) + yyy
       }
       else {
-        xPos = (sk.windowWidth / 2) + xx;
-        yPos = (sk.windowHeight * 0.618) + yy
+        xPos = (sk.windowWidth / 2) + xxx;
+        yPos = (sk.windowHeight * 0.618) + yyy
       }
       //yes!
       sk.ellipse( xPos, yPos, r, r);
@@ -181,7 +204,7 @@ const s = ( sk ) => {
     else {
       //draw a vertical rectangle and compute length
       g.rect(sk.windowWidth/2, sk.windowHeight/2, sk.windowHeight * 0.9 * 0.618, sk.windowHeight * 0.9)
-      length = Math.sqrt(Math.pow(sk.windowHeight * 0.9 * 0.618, 2), Math.pow(sk.windowHeight * 0.9, 2))
+      length = Math.sqrt(Math.pow(sk.windowHeight * 0.9 * 0.618, 2) + Math.pow(sk.windowHeight * 0.9, 2))
     }
     mask = g.get();
   }
