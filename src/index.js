@@ -76,7 +76,7 @@ const s = ( sk ) => {
 
     //set i to number of circles here and in resize
     i = numberOfCircles;
-    sk.background(20);
+    sk.background(28);
 
     
   };
@@ -117,11 +117,11 @@ const s = ( sk ) => {
       let xPos, yPos;
       if (feet.position.tag == "Right") {
         xPos = (sk.windowWidth * 0.618) + xxx;
-        yPos = (sk.windowHeight / 2) + yyy
+        yPos = (sk.windowHeight * 0.47) + yyy
       }
       else if (feet.position.tag == "Left") {
         xPos = (sk.windowWidth * 0.618/2) + xxx;
-        yPos = (sk.windowHeight / 2) + yyy
+        yPos = (sk.windowHeight * 0.47) + yyy
       }
       else if (feet.position.tag == "Top") {
         xPos = (sk.windowWidth / 2) + xxx;
@@ -140,7 +140,12 @@ const s = ( sk ) => {
 
 
       //draw mask
-      sk.drawingContext.shadowBlur = 0;
+      if (i == 0) {
+        sk.drawingContext.shadowBlur = length * 0.015
+      } else {
+        sk.drawingContext.shadowBlur = 0;
+      }
+      //sk.drawingContext.shadowBlur = 0;
       sk.image(mask, 0, 0);
     }
 
@@ -162,7 +167,7 @@ const s = ( sk ) => {
     sk.resizeCanvas(sk.windowWidth, sk.windowHeight);
     createMask();
     sk.drawingContext.shadowBlur = length * 0.005;
-    sk.background(20);
+    sk.background(28);
     sk.loop();
   };
 
@@ -189,7 +194,8 @@ const s = ( sk ) => {
     //create graphics the size of the canvas
     let g = sk.createGraphics(sk.windowWidth, sk.windowHeight);
     g.rectMode(sk.CENTER);
-    g.fill(20)
+    g.ellipseMode(sk.CENTER);
+    g.fill(36)
     g.rect(sk.windowWidth/2, sk.windowHeight/2, sk.windowWidth, sk.windowHeight)
     
 
@@ -201,13 +207,13 @@ const s = ( sk ) => {
     //handle verical and horizontal stuffs
     if( feet.position.orientation == "H" ) {
       //draw a horizontal rectangle and compute length
-      g.rect(sk.windowWidth/2, sk.windowHeight/2, sk.windowWidth * 0.9, sk.windowWidth * 0.9 * 0.618);
-      length = Math.sqrt(Math.pow(sk.windowWidth * 0.9, 2) + Math.pow(sk.windowWidth * 0.9 * 0.618, 2));
+      g.rect(sk.windowWidth/2, sk.windowHeight*0.47, sk.windowWidth * 0.85, sk.windowWidth * 0.85 * 0.618);
+      length = Math.sqrt(Math.pow(sk.windowWidth * 0.85, 2) + Math.pow(sk.windowWidth * 0.85 * 0.618, 2));
     }
     else {
       //draw a vertical rectangle and compute length
-      g.rect(sk.windowWidth/2, sk.windowHeight/2, sk.windowHeight * 0.9 * 0.618, sk.windowHeight * 0.9)
-      length = Math.sqrt(Math.pow(sk.windowHeight * 0.9 * 0.618, 2) + Math.pow(sk.windowHeight * 0.9, 2))
+      g.rect(sk.windowWidth/2, sk.windowHeight*0.47, sk.windowHeight * 0.85 * 0.618, sk.windowHeight * 0.85)
+      length = Math.sqrt(Math.pow(sk.windowHeight * 0.9 * 0.618, 2) + Math.pow(sk.windowHeight * 0.85, 2))
     }
     mask = g.get();
   }
