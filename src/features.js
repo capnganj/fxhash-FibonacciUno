@@ -1,5 +1,6 @@
-import { interpolateCool, interpolateInferno, interpolateMagma, interpolateWarm, interpolateViridis } from 'd3-scale-chromatic'
+import { interpolateCool, interpolateInferno, interpolateMagma, interpolateWarm, interpolateViridis, interpolatePuRd, interpolateBuPu, interpolateYlGn } from 'd3-scale-chromatic'
 import { rgb, color } from 'd3-color';
+
 
 class Features {
     constructor() {
@@ -82,6 +83,15 @@ class Features {
             case "Inferno": 
                 col = rgb(interpolateInferno(val));
                 break;
+            case "Purd":
+                col = rgb(interpolatePuRd(1-val));
+                break;
+            case "Ylgn":
+                col = rgb(interpolateYlGn(1-val));
+                break;
+            case "Bupu":
+                col = rgb(interpolateBuPu(1-val));
+                break;
             default:
                 col = rgb(interpolateWarm(val));
         }
@@ -135,20 +145,29 @@ class Features {
         let c = fxrand();
 
         //set palette
-        if (c < 0.15) {
+        if (c < 0.05) {
             this.color.name = "Warm"
         }
-        else if (c < 0.25) {
+        else if (c < 0.13) {
             this.color.name = "Cool"
         }
-        else if (c < 0.5) {
+        else if (c < 0.27) {
+            this.color.name = "Purd"
+        }
+        else if (c < 0.41) {
+            this.color.name = "Ylgn"
+        }
+        else if (c < 0.53) {
+            this.color.name = "Bupu"
+        }
+        else if (c < 0.65) {
             this.color.name = "Viridis"
         }
-        else if (c < 0.7) {
-            this.color.name = "Magma"
+        else if (c < 0.8) {
+            this.color.name = "Inferno"
         }
         else {
-            this.color.name = "Inferno"
+            this.color.name = "Magma"
         }
 
         //inverted?
@@ -230,7 +249,7 @@ class Features {
         else {
             this.quantity.tag = "Over"
         }
-        this.quantity.value = Math.round(this.map(q, 0, 1, 333, 512))
+        this.quantity.value = Math.round(this.map(q, 0, 1, 365, 512))
     }
 
     setPosition() {
