@@ -1,4 +1,4 @@
-import { interpolateCool, interpolateInferno, interpolateMagma, interpolateWarm, interpolateViridis, interpolatePuRd, interpolateBuPu, interpolateYlGn } from 'd3-scale-chromatic'
+import { interpolateYlOrRd, interpolateInferno, interpolateMagma, interpolateRdPu, interpolateViridis, interpolatePuRd, interpolateYlGnBu, interpolateYlGn } from 'd3-scale-chromatic'
 import { rgb, color } from 'd3-color';
 
 
@@ -68,11 +68,11 @@ class Features {
     interpolateFn(val) {
         let col;
         switch (this.color.name) {
-            case "Cool": 
-                col = rgb(interpolateCool(val));
+            case "Ylorrd": 
+                col = rgb(interpolateYlOrRd(1-val));
                 break
-            case "Warm": 
-                col = rgb(interpolateWarm(val));
+            case "Rdpu": 
+                col = rgb(interpolateRdPu(1-val));
                 break;
             case "Viridis": 
                 col = rgb(interpolateViridis(val));
@@ -89,8 +89,8 @@ class Features {
             case "Ylgn":
                 col = rgb(interpolateYlGn(1-val));
                 break;
-            case "Bupu":
-                col = rgb(interpolateBuPu(1-val));
+            case "Ylgnbu":
+                col = rgb(interpolateYlGnBu(1-val));
                 break;
             default:
                 col = rgb(interpolateWarm(val));
@@ -146,10 +146,10 @@ class Features {
 
         //set palette
         if (c < 0.05) {
-            this.color.name = "Warm"
+            this.color.name = "Ylorrd"
         }
         else if (c < 0.13) {
-            this.color.name = "Cool"
+            this.color.name = "Rdpu"
         }
         else if (c < 0.27) {
             this.color.name = "Purd"
@@ -158,7 +158,7 @@ class Features {
             this.color.name = "Ylgn"
         }
         else if (c < 0.53) {
-            this.color.name = "Bupu"
+            this.color.name = "Ylgnbu"
         }
         else if (c < 0.65) {
             this.color.name = "Viridis"
@@ -203,7 +203,7 @@ class Features {
             this.opacity.tag = "High"
         }
         this.opacity.baseValue = this.map(o, 0, 1, 5, 0);
-        this.opacity.topValue = this.map(o, 0, 1, 150, 110);
+        this.opacity.topValue = this.map(o, 0, 1, 135, 100);
     }
 
     setDirection() {
