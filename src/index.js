@@ -48,7 +48,7 @@ const s = ( sk ) => {
     createMask();
 
     //set the background color and other sketch-level variables
-    sk.drawingContext.shadowColor = 'black';
+    sk.drawingContext.shadowColor = 'rgba(33,33,33,0.33)';
     sk.drawingContext.shadowBlur = length * 0.005;
     sk.noStroke();
     sk.ellipseMode(sk.CENTER);
@@ -76,7 +76,7 @@ const s = ( sk ) => {
 
     //set i to number of circles here and in resize
     i = numberOfCircles;
-    sk.background(28);
+    sk.background(235, 213, 179);
 
     
   };
@@ -88,7 +88,7 @@ const s = ( sk ) => {
     //circles
     if (i >= 0) {
 
-      sk.drawingContext.shadowBlur = length * 0.005;
+      sk.drawingContext.shadowBlur = length * feet.map(i, 0, numberOfCircles, 0.0005, 0.1);
       
       //position
 
@@ -100,8 +100,8 @@ const s = ( sk ) => {
       //scaled offset values
 
       //scale by unitless maxX and maxY ranges
-      let xxx = feet.position.orientation == "H" ? feet.map(xx, maxX * -1, maxX, length/2 * -1, length/2) : feet.map(xx, maxX * -1, maxX, length*0.6 * -1, length*0.6);
-      let yyy = feet.position.orientation == "H" ? feet.map(yy, maxY * -1, maxY, length/2 * -1, length/2) : feet.map(yy, maxY * -1, maxY, length*0.6 * -1, length*0.6 );
+      let xxx = feet.position.orientation == "H" ? feet.map(xx, maxX * -1, maxX, length/2 * -1, length/2) : feet.map(xx, maxX * -1, maxX, length*0.3 * -1, length*0.3);
+      let yyy = feet.position.orientation == "H" ? feet.map(yy, maxY * -1, maxY, length/2 * -1, length/2) : feet.map(yy, maxY * -1, maxY, length*0.3 * -1, length*0.3 );
 
 
       //colors
@@ -115,22 +115,8 @@ const s = ( sk ) => {
 
       //position
       let xPos, yPos;
-      if (feet.position.tag == "Right") {
-        xPos = (sk.windowWidth * 0.618) + xxx;
-        yPos = (sk.windowHeight * 0.47) + yyy
-      }
-      else if (feet.position.tag == "Left") {
-        xPos = (sk.windowWidth * 0.618/2) + xxx;
-        yPos = (sk.windowHeight * 0.47) + yyy
-      }
-      else if (feet.position.tag == "Top") {
-        xPos = (sk.windowWidth / 2) + xxx;
-        yPos = (sk.windowHeight * 0.618/2) + yyy
-      }
-      else {
-        xPos = (sk.windowWidth / 2) + xxx;
-        yPos = (sk.windowHeight * 0.618) + yyy
-      }
+      xPos = (sk.windowWidth / 2) + xxx;
+      yPos = (sk.windowHeight * 0.47) + yyy
       //yes!
       sk.ellipse( xPos, yPos, r, r);
 
@@ -146,7 +132,7 @@ const s = ( sk ) => {
         sk.drawingContext.shadowBlur = 0;
       }
       //sk.drawingContext.shadowBlur = 0;
-      sk.image(mask, 0, 0);
+      //sk.image(mask, 0, 0);
     }
 
     //call preview and noloop after going all the way through
@@ -155,6 +141,7 @@ const s = ( sk ) => {
       if( previewed == false) {
         fxpreview();
         previewed = true;
+        download();
       }
     }
   };
@@ -167,7 +154,7 @@ const s = ( sk ) => {
     sk.resizeCanvas(sk.windowWidth, sk.windowHeight);
     createMask();
     sk.drawingContext.shadowBlur = length * 0.005;
-    sk.background(28);
+    sk.background(235, 213, 179);
     sk.loop();
   };
 
@@ -216,6 +203,13 @@ const s = ( sk ) => {
       length = Math.sqrt(Math.pow(sk.windowHeight * 0.9 * 0.618, 2) + Math.pow(sk.windowHeight * 0.85, 2))
     }
     mask = g.get();
+  }
+
+  function download() {
+    var link = document.createElement('a');
+    link.download = 'Fibonacci.png';
+    link.href = document.getElementById('defaultCanvas0').toDataURL()
+    link.click();
   }
 };
 

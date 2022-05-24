@@ -202,8 +202,8 @@ class Features {
         else {
             this.opacity.tag = "High"
         }
-        this.opacity.baseValue = this.map(o, 0, 1, 5, 0);
-        this.opacity.topValue = this.map(o, 0, 1, 135, 100);
+        this.opacity.baseValue = this.map(o, 0, 1, 215, 185);
+        this.opacity.topValue = this.map(o, 0, 1, 255, 235);
     }
 
     setDirection() {
@@ -234,8 +234,8 @@ class Features {
         else {
             this.radii.tag = "Extra Extra Large";
         }
-        this.radii.baseValue = this.map(r, 0, 1, 4, 2);
-        this.radii.topValue = this.map(r, 0, 1, 40, 20);
+        this.radii.baseValue = this.map(r, 0, 1, 9, 5);
+        this.radii.topValue = this.map(r, 0, 1, 50, 30);
     }
 
     setQuantity() {
@@ -249,18 +249,18 @@ class Features {
         else {
             this.quantity.tag = "Over"
         }
-        this.quantity.value = Math.round(this.map(q, 0, 1, 365, 512))
+        this.quantity.value = Math.round(this.map(q, 0, 1, 275, 333))
     }
 
     setPosition() {
         let p = fxrand();
         if (p < 0.25) {
             this.position.tag = "Right"
-            this.position.orientation = "H"
+            this.position.orientation = "V"
         }
         else if (p < 0.5) {
             this.position.tag = "Left"
-            this.position.orientation = "H"
+            this.position.orientation = "V"
         }
         else if ( p < 0.75 ) {
             this.position.tag = "Top"
