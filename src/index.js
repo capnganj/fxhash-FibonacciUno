@@ -141,7 +141,7 @@ const s = ( sk ) => {
       if( previewed == false) {
         fxpreview();
         previewed = true;
-        download();
+        //download();
       }
     }
   };

@@ -1,4 +1,4 @@
-import { interpolateYlOrRd, interpolateInferno, interpolateMagma, interpolateRdPu, interpolateViridis, interpolatePuRd, interpolateYlGnBu, interpolateYlGn } from 'd3-scale-chromatic'
+import { interpolateYlOrRd, interpolateInferno, interpolateMagma, interpolatePuBuGn, interpolatePlasma, interpolateRdPu, interpolateViridis, interpolateCividis, interpolateWarm, interpolateYlGnBu, interpolateYlGn, interpolateYlOrBr, interpolateRainbow, interpolateSinebow } from 'd3-scale-chromatic'
 import { rgb, color } from 'd3-color';
 
 
@@ -69,13 +69,13 @@ class Features {
         let col;
         switch (this.color.name) {
             case "Ylorrd": 
-                col = rgb(interpolateYlOrRd(1-val));
+                col = rgb(interpolateYlOrRd(val));
                 break
             case "Rdpu": 
-                col = rgb(interpolateRdPu(1-val));
+                col = rgb(interpolateRdPu(val));
                 break;
             case "Viridis": 
-                col = rgb(interpolateViridis(val));
+                col = rgb(interpolateViridis(1-val));
                 break;
             case "Magma": 
                 col = rgb(interpolateMagma(val));
@@ -83,14 +83,32 @@ class Features {
             case "Inferno": 
                 col = rgb(interpolateInferno(val));
                 break;
-            case "Purd":
-                col = rgb(interpolatePuRd(1-val));
+            case "Plasma": 
+                col = rgb(interpolatePlasma(val));
+                break;
+            case "Cividis": 
+                col = rgb(interpolateCividis(val));
+                break;
+            case "Warm": 
+                col = rgb(interpolateWarm(val));
+                break;
+            case "Rainbow": 
+                col = rgb(interpolateRainbow(1-val));
+                break;
+            case "Sinebow": 
+                col = rgb(interpolateSinebow(1-val));
                 break;
             case "Ylgn":
-                col = rgb(interpolateYlGn(1-val));
+                col = rgb(interpolateYlGn(val));
                 break;
             case "Ylgnbu":
-                col = rgb(interpolateYlGnBu(1-val));
+                col = rgb(interpolateYlGnBu(val));
+                break;
+            case "Pubugn":
+                col = rgb(interpolatePuBuGn(val));
+                break;
+            case "Ylorbr":
+                col = rgb(interpolateYlOrBr(val));
                 break;
             default:
                 col = rgb(interpolateWarm(val));
@@ -145,29 +163,50 @@ class Features {
         let c = fxrand();
 
         //set palette
-        if (c < 0.05) {
+
+        
+        if (c < 0.07) { //1
             this.color.name = "Ylorrd"
         }
-        else if (c < 0.13) {
+        else if (c < 0.14) { //2
             this.color.name = "Rdpu"
         }
-        else if (c < 0.27) {
-            this.color.name = "Purd"
-        }
-        else if (c < 0.41) {
+        else if (c < 0.21) { //3
             this.color.name = "Ylgn"
         }
-        else if (c < 0.53) {
+        else if (c < 0.28) {  //4
+            this.color.name = "Pubugn"
+        }
+        else if (c < 0.35) { //5
             this.color.name = "Ylgnbu"
         }
-        else if (c < 0.65) {
-            this.color.name = "Viridis"
+        else if (c < 0.42) { //6
+            this.color.name = "Viridis" 
         }
-        else if (c < 0.8) {
-            this.color.name = "Inferno"
+        else if (c < 0.49) {  //7
+            this.color.name = "Inferno" 
         }
-        else {
-            this.color.name = "Magma"
+        else if (c < 0.56) {  //8
+            this.color.name = "Plasma" 
+        }
+        else if (c < 0.63) {  //9
+            this.color.name = "Cividis" 
+        }
+        else if (c < 0.70) {  //10
+            this.color.name = "Warm" 
+        }
+        else if (c < 0.77) {  //11
+            this.color.name = "Ylorbr" 
+        }
+        else if (c < 0.85) {  //12
+            this.color.name = "Rainbow" 
+        }
+        else if (c < 0.92) {  //13
+            this.color.name = "Sinebow" 
+        }
+        //...
+        else {  //14
+            this.color.name = "Magma"  
         }
 
         //inverted?
@@ -187,7 +226,7 @@ class Features {
         else {
             this.noise.tag = "Noisy"
         }
-        this.noise.topValue = this.map(n, 0, 1, 0.005, 0.07);
+        this.noise.topValue = this.map(n, 0, 1, 0.025, 0.1);
         this.noise.baseValue = this.map(n, 0, 1, 0.2, 0.5);
     }
 
@@ -235,7 +274,7 @@ class Features {
             this.radii.tag = "Extra Extra Large";
         }
         this.radii.baseValue = this.map(r, 0, 1, 9, 5);
-        this.radii.topValue = this.map(r, 0, 1, 50, 30);
+        this.radii.topValue = this.map(r, 0, 1, 40, 30);
     }
 
     setQuantity() {
