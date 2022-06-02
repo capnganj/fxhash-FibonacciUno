@@ -69,13 +69,13 @@ class Features {
         let col;
         switch (this.color.name) {
             case "Ylorrd": 
-                col = rgb(interpolateYlOrRd(val));
+                col = rgb(interpolateYlOrRd(1-val));
                 break
             case "Rdpu": 
-                col = rgb(interpolateRdPu(val));
+                col = rgb(interpolateRdPu(1-val));
                 break;
             case "Viridis": 
-                col = rgb(interpolateViridis(1-val));
+                col = rgb(interpolateViridis(val));
                 break;
             case "Magma": 
                 col = rgb(interpolateMagma(val));
@@ -99,16 +99,16 @@ class Features {
                 col = rgb(interpolateSinebow(1-val));
                 break;
             case "Ylgn":
-                col = rgb(interpolateYlGn(val));
+                col = rgb(interpolateYlGn(1-val));
                 break;
             case "Ylgnbu":
-                col = rgb(interpolateYlGnBu(val));
+                col = rgb(interpolateYlGnBu(1-val));
                 break;
             case "Pubugn":
-                col = rgb(interpolatePuBuGn(val));
+                col = rgb(interpolatePuBuGn(1-val));
                 break;
             case "Ylorbr":
-                col = rgb(interpolateYlOrBr(val));
+                col = rgb(interpolateYlOrBr(1-val));
                 break;
             default:
                 col = rgb(interpolateWarm(val));
@@ -156,6 +156,15 @@ class Features {
             var zeros = new Array(len).join('0');
             return (zeros + str).slice(-len);
         }
+    }
+
+    invertColor2(col){
+        let r, g, b;
+        r = 255 - col.r;
+        g = 255 - col.g;
+        b = 255 - col.b;
+
+        return color(r, g, b).rgb();
     }
 
     //set color palette globally
@@ -226,7 +235,7 @@ class Features {
         else {
             this.noise.tag = "Noisy"
         }
-        this.noise.topValue = this.map(n, 0, 1, 0.025, 0.1);
+        this.noise.topValue = this.map(n, 0, 1, 0.05, 0.2);
         this.noise.baseValue = this.map(n, 0, 1, 0.2, 0.5);
     }
 
@@ -288,7 +297,7 @@ class Features {
         else {
             this.quantity.tag = "Over"
         }
-        this.quantity.value = Math.round(this.map(q, 0, 1, 275, 333))
+        this.quantity.value = Math.round(this.map(q, 0, 1, 300, 360))
     }
 
     setPosition() {

@@ -88,7 +88,8 @@ const s = ( sk ) => {
     //circles
     if (i >= 0) {
 
-      sk.drawingContext.shadowBlur = length * feet.map(i, 0, numberOfCircles, 0.0005, 0.1);
+      //shadow
+      sk.drawingContext.shadowBlur = length * feet.map(i, 0, numberOfCircles, 0.0005, 0.05);
       
       //position
 
@@ -141,7 +142,7 @@ const s = ( sk ) => {
       if( previewed == false) {
         fxpreview();
         previewed = true;
-        //download();
+        download();
       }
     }
   };
