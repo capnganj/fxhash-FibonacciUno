@@ -1,4 +1,4 @@
-import { interpolateYlOrRd, interpolateInferno, interpolateMagma, interpolatePuBuGn, interpolatePlasma, interpolateRdPu, interpolateViridis, interpolateCividis, interpolateWarm, interpolateYlGnBu, interpolateYlGn, interpolateYlOrBr, interpolateRainbow, interpolateSinebow } from 'd3-scale-chromatic'
+import { interpolateYlOrRd, interpolateInferno, interpolateMagma, interpolatePuBuGn, interpolatePlasma, interpolateRdPu, interpolateViridis, interpolateCividis, interpolateYlGnBu, interpolateYlGn, interpolateYlOrBr } from 'd3-scale-chromatic'
 import { rgb, color } from 'd3-color';
 
 
@@ -89,15 +89,6 @@ class Features {
             case "Cividis": 
                 col = rgb(interpolateCividis(val));
                 break;
-            case "Warm": 
-                col = rgb(interpolateWarm(val));
-                break;
-            case "Rainbow": 
-                col = rgb(interpolateRainbow(1-val));
-                break;
-            case "Sinebow": 
-                col = rgb(interpolateSinebow(1-val));
-                break;
             case "Ylgn":
                 col = rgb(interpolateYlGn(1-val));
                 break;
@@ -111,7 +102,7 @@ class Features {
                 col = rgb(interpolateYlOrBr(1-val));
                 break;
             default:
-                col = rgb(interpolateWarm(val));
+                col = rgb(interpolateMagma(val));
         }
 
         if (this.color.inverted) {
@@ -189,37 +180,28 @@ class Features {
         else if (c < 0.35) { //5
             this.color.name = "Ylgnbu"
         }
-        else if (c < 0.42) { //6
+        else if (c < 0.44) { //6
             this.color.name = "Viridis" 
         }
-        else if (c < 0.49) {  //7
+        else if (c < 0.55) {  //7
             this.color.name = "Inferno" 
         }
-        else if (c < 0.56) {  //8
+        else if (c < 0.66) {  //8
             this.color.name = "Plasma" 
         }
-        else if (c < 0.63) {  //9
+        else if (c < 0.77) {  //9
             this.color.name = "Cividis" 
         }
-        else if (c < 0.70) {  //10
-            this.color.name = "Warm" 
-        }
-        else if (c < 0.77) {  //11
+        else if (c < 0.88) {  //11
             this.color.name = "Ylorbr" 
         }
-        else if (c < 0.85) {  //12
-            this.color.name = "Rainbow" 
-        }
-        else if (c < 0.92) {  //13
-            this.color.name = "Sinebow" 
-        }
         //...
-        else {  //14
+        else {  //11
             this.color.name = "Magma"  
         }
 
         //inverted?
-        if( fxrand() > 0.666 ) {
+        if( fxrand() > 0.777 ) {
             this.color.inverted = true;
         }
     }
