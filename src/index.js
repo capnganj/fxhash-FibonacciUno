@@ -112,7 +112,9 @@ const s = ( sk ) => {
       sk.fill(col);
 
       //size
-      let r = feet.map(i, numberOfCircles, 0, length/feet.radii.baseValue, length/feet.radii.topValue);
+      let r = i >= numberOfCircles - 40 ? 
+        feet.map(i, numberOfCircles, numberOfCircles - 40, length/feet.radii.topValue, length/feet.radii.baseValue) :
+        feet.map(i, numberOfCircles, 0, length/feet.radii.baseValue, length/feet.radii.topValue)
 
       //position
       let xPos, yPos;
