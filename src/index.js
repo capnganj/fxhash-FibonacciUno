@@ -18,7 +18,6 @@ const s = ( sk ) => {
   //iteration vars -- these get reset on screen resize
   let i;
   let length;
-  let mask;
 
   //unitless x and y maximums -- need these to map against
   let maxX= 0;
@@ -37,15 +36,15 @@ const s = ( sk ) => {
       "Radii": feet.radii.tag, //circle sizes
       "Opacity" : feet.opacity.tag, //circle opacity
       "Noise" : feet.noise.tag, //how shuffled are the colors?
-      "Position" : feet.position.tag, //where is the focal point?
+      //"Position" : feet.position.tag, //where is the focal point?
       "Direction" : feet.direction.tag,  //radial stacking direction
-      "Quantity": feet.quantity.tag  //how many circles in the loop?
+      //"Quantity": feet.quantity.tag  //how many circles in the loop?
     };
     console.log("fxhashFeatures", window.$fxhashFeatures);
     //console.log("HashSmokeFeatures", feet);
 
-    //create the mask image and calculate length
-    createMask();
+    //calculate length
+    calcLength();
 
     //set the background color and other sketch-level variables
     sk.drawingContext.shadowColor = 'rgba(33,33,33,0.33)';
@@ -155,7 +154,7 @@ const s = ( sk ) => {
   sk.windowResized = () => {
     i=numberOfCircles;
     sk.resizeCanvas(sk.windowWidth, sk.windowHeight);
-    createMask();
+    calcLength();
     sk.drawingContext.shadowBlur = length * 0.005;
     sk.background(235, 213, 179);
     sk.loop();
@@ -180,32 +179,14 @@ const s = ( sk ) => {
     }
   }
 
-  function createMask() {
-    //create graphics the size of the canvas
-    let g = sk.createGraphics(sk.windowWidth, sk.windowHeight);
-    g.rectMode(sk.CENTER);
-    g.ellipseMode(sk.CENTER);
-    g.fill(36)
-    g.rect(sk.windowWidth/2, sk.windowHeight/2, sk.windowWidth, sk.windowHeight)
-    
+  function calcLength() {
 
-    let a = sk.color(255);
-    a.setAlpha(255);
-    g.fill(a);
-    g.noStroke();
-    g.blendMode(sk.REMOVE);
-    //handle verical and horizontal stuffs
-    if( feet.position.orientation == "H" ) {
-      //draw a horizontal rectangle and compute length
-      g.rect(sk.windowWidth/2, sk.windowHeight*0.47, sk.windowWidth * 0.85, sk.windowWidth * 0.85 * 0.618);
+    if( sk.windowWidth <= sk.windowHeight ) {
       length = Math.sqrt(Math.pow(sk.windowWidth * 0.85, 2) + Math.pow(sk.windowWidth * 0.85 * 0.618, 2));
     }
     else {
-      //draw a vertical rectangle and compute length
-      g.rect(sk.windowWidth/2, sk.windowHeight*0.47, sk.windowHeight * 0.85 * 0.618, sk.windowHeight * 0.85)
       length = Math.sqrt(Math.pow(sk.windowHeight * 0.9 * 0.618, 2) + Math.pow(sk.windowHeight * 0.85, 2))
     }
-    mask = g.get();
   }
 
   function download() {
