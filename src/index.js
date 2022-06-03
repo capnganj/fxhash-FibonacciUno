@@ -124,17 +124,6 @@ const s = ( sk ) => {
 
       //increment
       i--
-
-
-
-      //draw mask
-      if (i == 0) {
-        sk.drawingContext.shadowBlur = length * 0.015
-      } else {
-        sk.drawingContext.shadowBlur = 0;
-      }
-      //sk.drawingContext.shadowBlur = 0;
-      //sk.image(mask, 0, 0);
     }
 
     //call preview and noloop after going all the way through
