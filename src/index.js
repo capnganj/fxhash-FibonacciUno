@@ -38,7 +38,7 @@ const s = ( sk ) => {
       "Noise" : feet.noise.tag, //how shuffled are the colors?
       //"Position" : feet.position.tag, //where is the focal point?
       "Direction" : feet.direction.tag,  //radial stacking direction
-      //"Quantity": feet.quantity.tag  //how many circles in the loop?
+      "Quantity": feet.quantity.tag  //how many circles in the loop?
     };
     console.log("fxhashFeatures", window.$fxhashFeatures);
     //console.log("HashSmokeFeatures", feet);
@@ -132,7 +132,7 @@ const s = ( sk ) => {
       if( previewed == false) {
         fxpreview();
         previewed = true;
-        download();
+        //download();
       }
     }
   };
